@@ -3,7 +3,7 @@
 
 
 
-# STrollR
+# `S'patio `T'emporal `roll`ed standed errors in `R'
 
 A computationally efficient way to calculate covariance matrices that are corrected for spatial and temporal correlation using a method I call *rolling*. The figure to the right is a visual representation of one such process \{ VonNeumann(1, rho=.3), AR(1, rho=.8) \}
 
