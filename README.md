@@ -1,9 +1,11 @@
 <img src="https://raw.githubusercontent.com/Jadamso/STrollR/master/STsim/STvarX.gif"  align="right" width="150" height="150">
 
 
+<!--
+`S'patio `T'emporal `roll`ed standed errors in `R'
+-->
 
-
-# `S'patio `T'emporal `roll`ed standed errors in `R'
+# STrollR
 
 A computationally efficient way to calculate covariance matrices that are corrected for spatial and temporal correlation using a method I call *rolling*. The figure to the right is a visual representation of one such process \{ VonNeumann(1, rho=.3), AR(1, rho=.8) \}
 
