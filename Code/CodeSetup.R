@@ -12,19 +12,15 @@ for( i in rfiles) {
 
 # devtools::use_package( i, "Suggests", pkg=pdir)}
 
-
 #install.packages("sf")
 #devtools::install_github("thk686/rgdal2")
 # library(spacetime)
 
 #-------------------------------------------------------------------
 ##################
-# CHUNK A
-################## 
-# Add Codes
-
-
 # Which Codes
+################## 
+
 rfile0 <- c(
     "VarioJ.R",
     #"TwoWayFE.R",
@@ -35,12 +31,14 @@ rfile0 <- c(
     "SpaceTimeSE_format.R",  
     "SpaceTimeSE.R",
     "STFakeData.R",
-    "STsimFunctions.R"
+    "STsimFunctions.R",
+    "mfxall.R",
+    "mfxi.R",
+    "mfxi_lm.R"
 )
 
-codedire <- path.expand("~/Desktop/Common/R_Code/")
-rfiles <- paste0(codedire, rfile0)
-
+rfiles <- paste0(hmdir, "STrollR/", rfile0)
+    
 # Move Code
 file.copy(rfiles, rdir, overwrite=T )
 devtools::load_all( rdir )

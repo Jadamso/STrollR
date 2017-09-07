@@ -1,13 +1,3 @@
-#########################
-# RBLOCK 000
-#########################
-#http://r-pkgs.had.co.nz
-#https://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html
-
-library(devtools)
-library(roxygen2)
-source( "~/Desktop/Common/R_Code/dir.create.safe.R")
-
 #------------------------------------------------------------------
 ##################
 # Author Info
