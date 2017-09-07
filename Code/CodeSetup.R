@@ -32,6 +32,7 @@ rfile0 <- c(
     "SpaceTimeSE.R",
     "STFakeData.R",
     "STsimFunctions.R",
+    "STsimPlotFunctions.R",
     "mfxall.R",
     "mfxi.R",
     "mfxi_lm.R"
