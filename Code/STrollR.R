@@ -48,4 +48,4 @@ print("Done")
 
 ## source("~/Desktop/Packages/STrollR/Code/STrollR.R")
 
-## R CMD BATCH STrollR.R
+## R CMD BATCH Code/STrollR.R && rm STrollR.Rout

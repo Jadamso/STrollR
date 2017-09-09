@@ -34,9 +34,7 @@ rfile0 <- c(
     "STsimFunctions.R",
     "STsimPlotFunctions.R",
     "mfxall.R",
-    "mfxi.R",
-    "mfxi_lm.R"
-)
+    "mfxi.R")
 
 rfiles <- paste0(hmdir, "STrollR/", rfile0)
     
