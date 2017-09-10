@@ -21,7 +21,7 @@ for( i in rfiles) {
 # Which Codes
 ################## 
 
-rfile0 <- c(
+rfile <- c(
     "VarioJ.R",
     #"TwoWayFE.R",
     "SpatialWeights.R",
@@ -36,7 +36,7 @@ rfile0 <- c(
     "mfxall.R",
     "mfxi.R")
 
-rfiles <- paste0(hmdir, "STrollR/", rfile0)
+rfiles <- paste0(hmdir, "STrollR/", rfile)
     
 # Move Code
 file.copy(rfiles, rdir, overwrite=T )
