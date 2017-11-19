@@ -20,9 +20,9 @@ options(devtools.name="Jordan Adamson",
 # Package Description
 ################## 
 
-Title <- 'A Library for Correcting Standard Errors for Computing Spatial and Temporal Correlation post-estimation'
+Title <- pack
 URL   <- 'https://sites.google.com/a/g.clemson.edu/ja-resources'
-Description <- 'A computationally efficient way to calculate covariance matrices that are corrected for spatial and temporal correlation using a method I call *rolling*. Huge spatiotemporal covariance matrices can be calculated using sparse matrix approaches with spam and spam64. To calculate large sparse spatial weights matrices, use spam::rdist. See my website <https://sites.google.com/a/g.clemson.edu/ja-resources>. or github <https://github.com/Jadamso>.'
+Description <- 'A Library for Correcting Standard Errors for Computing Spatial and Temporal Correlation post-estimation. A computationally efficient way to calculate covariance matrices that are corrected for spatial and temporal correlation using a method I call *rolling*. Huge spatiotemporal covariance matrices can be calculated using sparse matrix approaches with spam and spam64. To calculate large sparse spatial weights matrices, use spam::rdist. See my website <https://sites.google.com/a/g.clemson.edu/ja-resources>. or github <https://github.com/Jadamso>.'
 #This projects adheres to semantic versioning <http://semver.org/>
 Maint <- "'Jordan Adamson<jordan.m.adamson@gmail.com>'"
 

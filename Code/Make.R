@@ -49,4 +49,6 @@ print("Done")
 
 ## source("~/Desktop/Packages/STrollR/Code/STrollR.R")
 
-## R CMD BATCH Code/STrollR.R && rm STrollR.Rout .Rdata
+## R CMD BATCH --no-save Code/Make.R && rm Make.Rout
+
+
