@@ -6,7 +6,7 @@ library(devtools)
 library(roxygen2)
 library(MiscUtils)
 
-hmdir <- path.expand("~/Desktop/Common/R_Code/")
+ 
 pmdir <- path.expand("~/Desktop/Packages/")
 
 #-------------------------------------------------------------------
