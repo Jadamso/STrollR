@@ -26,29 +26,29 @@ source(paste0(pdir,"Code/PackageSetup.R") )
 # Create R Package Contents
 source(paste0(pdir,"Code/CodeSetup.R") )
 
-pack_up(pdir)
-
 message(" Name Changes from Paper2:
     vcovSTsep --> vcovST
     vcovSCL --> vcovST.loop")
-    
+
+devtools::build(pkg=packg, manual=TRUE)
+
+system( paste0('R CMD Rd2pdf ', packg) )
+#devtools::check_built(manual=TRUE, path=packg)
+
 #-------------------------------------------------------------------
 ##################
-# Install 
+# Upload and Install 
 ##################
+
+MiscUtils::pack_up(pdir)
+## https://www.rstudio.com/wp-content/uploads/2015/03/devtools-cheatsheet.pdf
+
 devtools::install(packg) ## Locally Works
 
 devtools::install_github( paste0("Jadamso/",pack), subdir=pack)
-## Public Package From Github Fails Often
 
 citation(pack)
 
 print("Done")
 
-## importFrom(data.table, parallel)
-
-## source("~/Desktop/Packages/STrollR/Code/STrollR.R")
-
-## R CMD BATCH --no-save Code/Make.R && rm Make.Rout
-
-
+## R CMD BATCH --no-save Code/Make.R Code/Make.Rout
