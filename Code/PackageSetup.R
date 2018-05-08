@@ -21,15 +21,19 @@ options(devtools.name="Jordan Adamson",
 ################## 
 
 Title <- 'Correct Standard Errors for Computing Spatial and Temporal Correlation post-estimation.'
-URL   <- 'https://sites.google.com/a/g.clemson.edu/ja-resources'
-Description <- 'A computationally efficient way to calculate covariance matrices that are corrected for spatial and temporal correlation using a method I call *rolling*. Huge spatiotemporal covariance matrices can be calculated using sparse matrix approaches with spam and spam64. To calculate large sparse spatial weights matrices, use spam::rdist. See my website <https://sites.google.com/a/g.clemson.edu/ja-resources>. or github <https://github.com/Jadamso>.'
+Description <- 'A computationally efficient way to calculate covariance matrices that are corrected for spatial and temporal correlation using a method I call *rolling*. Huge spatiotemporal covariance matrices can be calculated using sparse matrix approaches with spam and spam64. To calculate large sparse spatial weights matrices, use spam::rdist.'
 #This projects adheres to semantic versioning <http://semver.org/>
-Maint <- "'Jordan Adamson<jordan.m.adamson@gmail.com>'"
+
+URL   <- paste0(' <https://github.com/Jadamso/',pack,'>')
+#'https://sites.google.com/a/g.clemson.edu/ja-resources'
+Maint <- "Jordan Adamson <jordan.m.adamson@gmail.com>"
+Author <- "Jordan Adamson [aut, cre]"
 
 
 my_description <- list(
-    # "Maintainer" = Maint, 
     "Title"      = Title,
+    "Author"     = Author,
+    "Maintainer" = Maint, 
     "Description"= Description,
     "Published"  = Sys.Date(),
     "Date"       = Sys.Date(),
@@ -40,6 +44,7 @@ my_description <- list(
         role=c("aut","cre"))'
 )
 options(devtools.desc=my_description)
+
 #------------------------------------------------------------------
 ##################
 # Create Package
