@@ -22,9 +22,9 @@ Huge spatiotemporal covariance matrices can be efficiently calculated by using s
 
 ```r
 
-    #install.packages("devtools")
-    devtools::install_github("Jadamso/STrollR",subdir="STrollR")
-    citation("STrollR")
+#install.packages("devtools")
+devtools::install_github("Jadamso/STrollR",subdir="STrollR")
+citation("STrollR")
 
 ```
 
