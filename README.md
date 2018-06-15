@@ -1,6 +1,6 @@
 
-<figure>
-  <img src="https://raw.githubusercontent.com/Jadamso/STrollR/master/STsim/STvarX.gif"  align="right" width="150" height="150">
+<figure> align="right"
+  <img src="https://raw.githubusercontent.com/Jadamso/STrollR/master/STsim/STvarX.gif" width="150" height="150">
   <figcaption> visual representation of a *{VonNeumann(1, rho=.3), AR(1, rho=.8)}* spatiotemporal process ) </figcaption>
 </figure>
 
