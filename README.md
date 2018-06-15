@@ -5,7 +5,7 @@
 
 # STrollR
 
-A computationally efficient way to calculate covariance matrices that are corrected for spatial and temporal correlation using a method I call *rolling*. The calculations are not only fast, but transparent, and eventually helping to correct bugs in the original stata version [ols_spatial_HAC.do](http://www.globalpolicy.science/code/) as well as the [R version](http://www.trfetzer.com/using-r-to-estimate-spatial-hac-errors-per-conley/) 
+A computationally efficient way to calculate covariance matrices that are corrected for spatial and temporal correlation using a method I call *rolling*. The calculations are not only fast, but transparent - eventually helping to correct bugs in the original stata version [ols_spatial_HAC.do](http://www.globalpolicy.science/code/) as well as the [R version](http://www.trfetzer.com/using-r-to-estimate-spatial-hac-errors-per-conley/) 
 
 
 <p  align="center">
