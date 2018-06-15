@@ -1,5 +1,5 @@
 <img src="https://raw.githubusercontent.com/Jadamso/STrollR/master/STsim/STvarX.gif"  align="right" width="150" height="150">
-
+( visual representation of a \{ VonNeumann(1, rho=.3), AR(1, rho=.8) \} spatiotemporal process )
 
 <!--
 `S'patio `T'emporal `roll`ed standed errors in `R'
@@ -7,7 +7,7 @@
 
 # STrollR
 
-A computationally efficient way to calculate covariance matrices that are corrected for spatial and temporal correlation using a method I call *rolling*. The figure to the right is a visual representation of one such process \{ VonNeumann(1, rho=.3), AR(1, rho=.8) \}. The calculations are not only fast, but transparent, and eventually helping to correct bugs in the original stata version [ols_spatial_HAC.do](http://www.globalpolicy.science/code/) as well as the [R version](http://www.trfetzer.com/using-r-to-estimate-spatial-hac-errors-per-conley/) 
+A computationally efficient way to calculate covariance matrices that are corrected for spatial and temporal correlation using a method I call *rolling*. The calculations are not only fast, but transparent, and eventually helping to correct bugs in the original stata version [ols_spatial_HAC.do](http://www.globalpolicy.science/code/) as well as the [R version](http://www.trfetzer.com/using-r-to-estimate-spatial-hac-errors-per-conley/) 
 
 
 Huge spatiotemporal covariance matrices can be efficiently calculated by using sparse matrix approaches with spam and spam64, spcifically spam::rdist. The correction is applied in a post-estimation style and some functions have been extended to take advantage of parallel processing. Some of the math is layed out in the appendix to the third chapter of my [dissertation](https://sites.google.com/a/g.clemson.edu/ja-resources/research/Adamson2017_Thesis.pdf?attredirects=0). 
