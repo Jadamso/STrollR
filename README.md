@@ -84,7 +84,7 @@ sqrt( diag( VCOV / REG$clustervcv ) )
 ## 1.438368 1.413572
 ## spatial+clustered SE's > clustered SE's
 ```
-## Example of the approach
+## Example of the approach for Time-Series
 
 Here is an example to display the logic, applied to temporal correlations for easy comparison.
 
