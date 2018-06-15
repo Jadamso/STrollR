@@ -1,4 +1,4 @@
-
+<p  align="right">
 <figure>
   <img src="https://raw.githubusercontent.com/Jadamso/STrollR/master/STsim/STvarX.gif"  align="right" width="150" height="150">
   <figcaption align="right">
@@ -6,7 +6,7 @@
   
   *VonNeumann(1, rho=.3), AR(1, rho=.8)* </figcaption>
 </figure>
-
+<p>
 <!--
 `S'patio `T'emporal `roll`ed standed errors in `R'
 -->
