@@ -1,7 +1,9 @@
 
-<figure align="right">
+<figure>
   <img src="https://raw.githubusercontent.com/Jadamso/STrollR/master/STsim/STvarX.gif"  align="right" width="150" height="150">
-  <figcaption> Spatiotemporal Process Visualized
+  <figcaption align="right">
+  Spatiotemporal Process Visualized
+  
   *VonNeumann(1, rho=.3), AR(1, rho=.8)* </figcaption>
 </figure>
 
