@@ -1,5 +1,8 @@
+<p>
 <img src="https://raw.githubusercontent.com/Jadamso/STrollR/master/STsim/STvarX.gif"  align="right" width="150" height="150">
-( visual representation of a \{ VonNeumann(1, rho=.3), AR(1, rho=.8) \} spatiotemporal process )
+
+( visual representation of a *{VonNeumann(1, rho=.3), AR(1, rho=.8)}* spatiotemporal process )
+</p>
 
 <!--
 `S'patio `T'emporal `roll`ed standed errors in `R'
