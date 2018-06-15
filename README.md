@@ -78,7 +78,7 @@ sqrt( diag( VCOV / REG$clustervcv ) )
 ```
 ## Example of the approach
 
-Here is an example to display the logic. The example is only for temporal correlation.
+Here is an example to display the logic, applied to temporal correlations for easy comparison.
 
 ```r
 #--------------------------------------------------------------
