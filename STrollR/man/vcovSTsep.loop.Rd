@@ -4,8 +4,9 @@
 \alias{vcovSTsep.loop}
 \title{vcovSTsep with Parallel for Space and Time}
 \usage{
-vcovSTsep.loop(DAT, LISTJ = NA, wmat = LISTJ$wmat, t_double_count = FALSE,
-  verbose = FALSE, return_each = FALSE, cores = 4, tcores = NA)
+vcovSTsep.loop(DAT, LISTJ = NA, wmat = LISTJ$wmat,
+  t_double_count = FALSE, verbose = FALSE, return_each = FALSE,
+  cores = 4, tcores = NA)
 }
 \arguments{
 \item{DAT}{list of regression objects from vcov.format}

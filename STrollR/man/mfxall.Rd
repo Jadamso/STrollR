@@ -4,8 +4,9 @@
 \alias{mfxall}
 \title{Run multiple regressions on the same dataset}
 \usage{
-mfxall(FORMS, ..., mfx_fun = mfxi, mc.cores = as.numeric(system("nproc",
-  intern = TRUE)), parallel = TRUE)
+mfxall(FORMS, ..., mfx_fun = mfxi,
+  mc.cores = as.numeric(system("nproc", intern = TRUE)),
+  parallel = TRUE)
 }
 \arguments{
 \item{FORMS}{list of regression formula}

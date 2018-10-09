@@ -4,8 +4,8 @@
 \alias{iterateObsJSpatial}
 \title{Wrapper for Matrix Calculation for Space}
 \usage{
-iterateObsJSpatial(sub_dat, Xvars, wmat, verbose = TRUE, checkSym = FALSE,
-  XOmegaX = XOmegaX0, ...)
+iterateObsJSpatial(sub_dat, Xvars, wmat, verbose = TRUE,
+  checkSym = FALSE, XOmegaX = XOmegaX0, ...)
 }
 \arguments{
 \item{sub_dat}{a dataframe object for 1 time period}

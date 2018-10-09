@@ -4,8 +4,8 @@
 \alias{iterateObsJTemporal}
 \title{Wrapper for Matrix Calculation for Time}
 \usage{
-iterateObsJTemporal(sub_dat, Xvars, wmat, verbose = TRUE, checkSym = FALSE,
-  XOmegaX = XOmegaX0, ...)
+iterateObsJTemporal(sub_dat, Xvars, wmat, verbose = TRUE,
+  checkSym = FALSE, XOmegaX = XOmegaX0, ...)
 }
 \arguments{
 \item{sub_dat}{a data frame object for one cell unit}

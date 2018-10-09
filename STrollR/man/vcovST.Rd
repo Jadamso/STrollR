@@ -5,14 +5,15 @@
 \alias{vcovST.loop}
 \title{calculate vcovSTsep for felm object}
 \usage{
-vcovST(vcovfun = vcovSTsep, reg, DF, unit, time, sp_coords, t_cutoff = NA,
-  d_cutoff = NA, wmat = NA, tmat = NA, latlon = TRUE,
-  convert_to_angles = TRUE, verbose = FALSE, SPLIT_sp = FALSE,
-  SPLIT_t = FALSE, SPLIT = FALSE)
+vcovST(vcovfun = vcovSTsep, reg, DF, unit, time, sp_coords,
+  t_cutoff = NA, d_cutoff = NA, wmat = NA, tmat = NA,
+  latlon = TRUE, convert_to_angles = TRUE, verbose = FALSE,
+  SPLIT_sp = FALSE, SPLIT_t = FALSE, SPLIT = FALSE)
 
 vcovST.loop(vcovfun = vcovSpace.loop, reg, DF, unit, time, sp_coords,
-  t_cutoff = NA, d_cutoff = NA, wmat = NA, tmat = NA, latlon = TRUE,
-  convert_to_angles = TRUE, verbose = FALSE, cores = 4, vcvtime = TRUE)
+  t_cutoff = NA, d_cutoff = NA, wmat = NA, tmat = NA,
+  latlon = TRUE, convert_to_angles = TRUE, verbose = FALSE,
+  cores = 4, vcvtime = TRUE)
 }
 \arguments{
 \item{vcovfun}{function for which type of SHAC correction}

@@ -4,10 +4,12 @@
 \alias{VonNeumann}
 \title{Compute VonNeumann Neighbours}
 \usage{
-VonNeumann(coord_sp)
+VonNeumann(coord_sp, directions = 4)
 }
 \arguments{
-\item{coord_sp}{SpatialPoints object, matrix of coordinates}
+\item{coord_sp}{SpatialPoints object or coordinate-matrix}
+
+\item{directions}{see adjacent}
 }
 \value{
 sparse weights matrix

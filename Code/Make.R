@@ -18,7 +18,7 @@ pdir  <- paste0(pmdir, pack,"/")
 packg <- paste0(pdir, pack)
 
 
-Version <- numeric_version("0.1.3")
+Version <- numeric_version("0.1.4")
 
 # Setup R Package
 source(paste0(pdir,"Code/PackageSetup.R") )

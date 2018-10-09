@@ -342,14 +342,19 @@ weight_mat <- compiler::cmpfun( function(
 #' Compute VonNeumann Neighbours
 ##################
 #' 
-#' @param coord_sp SpatialPoints object, matrix of coordinates
+#' @param coord_sp SpatialPoints object or coordinate-matrix
+#' @param directions see adjacent
 #' @return sparse weights matrix
 # @examples VonNeumann( sp::SpatialPoints(expand.grid( list(x=1:10, y=1:10))) )
 #' @export
 
 
-VonNeumann <- function(coord_sp){
-
+VonNeumann <- function(coord_sp, directions=4){
+        
+        if( class(coord_sp) %in% c('data.frame','matrix')){
+            message('converting to SpatialPoints')
+            coord_sp <- sp::SpatialPoints( coord_sp )
+        }
         sp::gridded(coord_sp) <- TRUE
         rast <- raster(coord_sp)
 
@@ -358,7 +363,7 @@ VonNeumann <- function(coord_sp){
         nmat <- adjacent(rast,
             cells=vv,
             sorted=T, id=TRUE,
-            directions=4)
+            directions=directions)
 
         nmat_1 <- tapply(nmat[,"from"], nmat[,"id"], unique)
 
