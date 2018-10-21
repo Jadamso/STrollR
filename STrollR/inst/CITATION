@@ -1,5 +1,5 @@
 bibentry(bibtype = "Manual",
-         textVersion = "Jordan Adamson (2018). STrollR: Correct Standard Errors for Computing Spatial and Temporal Correlation post-estimation.. R package version 0.1.4.",
+         textVersion = "Jordan Adamson (2018). STrollR: Correct Standard Errors for Computing Spatial and Temporal Correlation post-estimation.. R package version 0.1.5.",
          header = "To cite package 'STrollR' in publications use:",
          key = "STrollR",
          title = "{STrollR}: Correct Standard Errors for Computing Spatial and Temporal Correlation post-estimation.",
@@ -9,5 +9,5 @@ bibentry(bibtype = "Manual",
                          email = "jordan.m.adamson@gmail.com"),
          year = "2018",
          month = "10",
-         note = "R package version 0.1.4",
+         note = "R package version 0.1.5",
          url = " <https://github.com/Jadamso/STrollR>")

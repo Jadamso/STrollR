@@ -1,21 +1,28 @@
 Package: STrollR
-Title: Correct Standard Errors for Computing Spatial and Temporal Correlation post-estimation.
-Version: 0.1.4
-Authors@R: person("Jordan", "Adamson",
-        email="jordan.m.adamson@gmail.com",
-        role=c("aut","cre"))
-Description: A computationally efficient way to calculate covariance matrices that are corrected for spatial and temporal correlation using a method I call *rolling*. Huge spatiotemporal covariance matrices can be calculated using sparse matrix approaches with spam and spam64. To calculate large sparse spatial weights matrices, use spam::rdist.
-Depends: R (>= 3.5.0)
-License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
+Title: Correct Standard Errors for Computing Spatial and
+    Temporal Correlation post-estimation.
+Version: 0.1.5
+Date: 2018-10-21
+Authors@R: 
+    person(given = "Jordan",
+           family = "Adamson",
+           role = c("aut", "cre"),
+           email = "jordan.m.adamson@gmail.com")
 Author: Jordan Adamson [aut, cre]
 Maintainer: Jordan Adamson <jordan.m.adamson@gmail.com>
-Published: 2018-10-08
-Date: 2018-10-08
+Description: A computationally efficient way to calculate
+    covariance matrices that are corrected for spatial and temporal
+    correlation using a method I call *rolling*. Huge spatiotemporal
+    covariance matrices can be calculated using sparse matrix approaches
+    with spam and spam64. To calculate large sparse spatial weights
+    matrices, use spam::rdist.
+License: MIT + file LICENSE
 URL: <https://github.com/Jadamso/STrollR>
-RoxygenNote: 6.1.0
-Imports: Matrix,
+Encoding: UTF-8
+LazyData: true
+Published: 2018-10-21
+Imports: 
+    Matrix,
     spam,
     spam64,
     parallel,
@@ -23,3 +30,4 @@ Imports: Matrix,
     lfe,
     spdep,
     sphet
+RoxygenNote: 6.1.0

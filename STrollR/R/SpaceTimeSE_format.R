@@ -180,9 +180,10 @@ vcovST.format <- function(
     # Format Data
 
     if( class(reg) == "felm") {
-        dat <- data.frame(reg$cY, reg$cX)
+        #dat <- data.frame(reg$cY, reg$cX)
+        dat <- as.data.frame( cbind(reg$cY, reg$cX) )
     } else if(class(reg) == "lm") {
-        dat <- data.frame(reg$model)
+        dat <- as.data.frame(reg$model)
     } else {
         message("Model class not recognized.")
         break
