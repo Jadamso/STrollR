@@ -138,12 +138,12 @@ vcovST <- compiler::cmpfun( function(
 #' vcovST for seperable covariances using split approach
 ##################
 #'
-#' @describeIn vcovST
-#'
 #' @param vcvtime add temporal clustering
 #' @param cores number of cores to use
 #'
 #' @details if vcvtime==FALSE, wmat should have diagonal elements
+#'
+#' @describeIn vcovST
 #'
 #' @export
 

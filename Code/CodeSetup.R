@@ -3,11 +3,13 @@
 # Libraries
 ##################
 
+
 ## Imported Packages: (.packages())
 rfiles <- c("Matrix","spam","spam64",
     "parallel","data.table","lfe", "spdep", "sphet")
 for( i in rfiles) {
-    devtools::use_package( i, pkg=packg)
+    #devtools::use_package( i, pkg=packg)
+    usethis::use_package( i )
 }
 
 # devtools::use_package( i, "Suggests", pkg=pdir)}
@@ -37,7 +39,7 @@ rfile <- c(
     "mfxi.R")
 
 rfiles <- paste0(pdir,"Code/R_Code/",rfile)
-    
+
 # Move Code
 file.copy(rfiles, rdir, overwrite=T )
 devtools::load_all( rdir )
