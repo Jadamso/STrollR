@@ -18,7 +18,10 @@ A computationally efficient way to calculate covariance matrices that are correc
 </figure>
 <p>
 
-Huge spatiotemporal covariance matrices can be efficiently calculated by using sparse matrix approaches with spam and spam64, spcifically spam::rdist. The correction is applied in a post-estimation style and some functions have been extended to take advantage of parallel processing. Some of the math is layed out in the appendix to the third chapter of my [dissertation](https://sites.google.com/a/g.clemson.edu/ja-resources/research/Adamson2017_Thesis.pdf?attredirects=0). 
+Huge spatiotemporal covariance matrices can be efficiently calculated by using sparse matrix approaches with spam and spam64, spcifically spam::rdist. The correction is applied in a post-estimation style and some functions have been extended to take advantage of parallel processing. Some of the math is layed out in the appendix to the third chapter of my paper ``Political Violence and The Geographic Concentration of Countries''
+
+<!-- [dissertation]
+(https://sites.google.com/a/g.clemson.edu/ja-resources/research/Adamson2017_Thesis.pdf?attredirects=0). -->
 
 
 <!-- ![Alt Text](https://raw.githubusercontent.com/Jadamso/STrollR/master/STsim/STvarX.gif)
