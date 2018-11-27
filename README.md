@@ -85,7 +85,7 @@ VCOV <- vcovST.loop(
 # Comparison Standard Errors
 sqrt( diag( VCOV / REG$clustervcv ) )
 ## 1.438368 1.413572
-## spatial+clustered SE's > clustered SE's
+## spatial+clustered SE's / clustered SE's > 1
 ```
 ## Example of the approach for Time-Series
 
