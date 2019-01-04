@@ -1,0 +1,57 @@
+\RequirePackage{ASetup}
+
+\begin{document}
+\begin{center}
+\textbf{\Large{Computing Space and Time Autocorrelated Standard Errors}}\\
+%\label{sect:star_errors}
+Jordan Adamson, \url{https://github.com/Jadamso/STrollR}
+\end{center}
+The standard errors for cellular data over time can be corrected for autocorrelation over space and time. Denote $\Sigma_{i}$ as the autocorrelation over time within a cell, and $\Sigma_{t}$ as the autocorrelation over space within a time period. Then the covariance matrix for the entire set can be written as separable,
+%\begin{eqnarray*}
+$\Sigma_{} = \Sigma_{I} + \Sigma_{T}$
+%\end{eqnarray*}
+, where $\Sigma_{I}$ denotes $\Sigma_{i}$ for all individuals and $\Sigma_{T}$ denotes $\Sigma_{t}$ for all time periods.\footnote{Note that either $\Sigma_{i}$ or $\Sigma_{t}$ are specified with a 0 diagonal as to not double count the variance for cell $g$ in both matrices.} To estimate $\Sigma_{t}$,
+% two methods are used in practice: estimating the spatial autocorrelation process \parencite{KP1999} or correcting the standard errors post-estimation \parencite{Conley1999}.
+one can use a weight $k_{i,j}$ between observations $i$ and $j$ based on their distance. For example, the Bartlett kernel, also known as the tent or triangle kernel, can create very sparse covariance matrices, as $k_{i,j}=0$ for many $i,j$. To exploit this property, I first formulate the `meat' of the variance estimator,
+\begin{eqnarray*}
+X' K \circ \hat{e} \hat{e}' X
+= X' K \circ E \circ E'X 
+= X' K \circ (\mathbf{1} * \hat{e}) \circ ( \mathbf{1} * \hat{e})' X
+= X' (\hat{e} * (K * \hat{e})' )' X
+\end{eqnarray*}
+
+,where $'$ denotes transpose, $K$ denotes the sparse weights matrix, $\circ$ denotes the Hadamard product of matrices, $*$ denotes the column-wise Hadamard product of a matrix and a vector, and $\mathbf{1}$ denotes a matrix of ones. Specifically, the kernel-weighted residuals, $K \circ \hat{e} \hat{e}'$, are 
+\begin{eqnarray*}
+\hspace*{-1em}
+\left[\begin{array}{cccc}
+k_{11}\hat{e}_{1}\hat{e}_{1} & k_{12}\hat{e}_{1}\hat{e}_{2} & \hdots & k_{1N}\hat{e}_{1}\hat{e}_{N}  \\
+k_{12}\hat{e}_{1}\hat{e}_{2} & k_{22}\hat{e}_{2}\hat{e}_{2} &	     & 		     					\\
+\vdots						 &   				  			& \ddots &  	        					\\
+k_{1N}\hat{e}_{1}\hat{e}_{N} & k_{2N}\hat{e}_{2}\hat{e}_{N} & \hdots & k_{NN}\hat{e}_{N}\hat{e}_{N}
+\end{array}\right] 
+=
+\left[\begin{array}{cccc}
+k_{11} & k_{12} & \hdots  & k_{1N}  \\
+k_{12} & k_{22} & 	      & 		\\
+\vdots	&   	& \ddots  &	 	\\
+k_{1N} & k_{2N} & \hdots  & k_{NN}
+\end{array}\right]
+\circ
+\left[\begin{array}{cccc}
+\hat{e}_{1} & \hat{e}_{1} & \hdots  & \hat{e}_{1}  \\
+\hat{e}_{2} & \hat{e}_{2} & 	    & 		       \\
+\vdots		&   		  & \ddots  &  	           \\
+\hat{e}_{N} & \hat{e}_{N} & \hdots  & \hat{e}_{N}
+\end{array}\right]
+\circ
+\left[\begin{array}{cccc}
+\hat{e}_{1} & \hat{e}_{2} & \hdots  & \hat{e}_{N} \\
+\hat{e}_{1} & \hat{e}_{2} & 	    &			  \\
+\vdots      &			  & \ddots  &			  \\
+\hat{e}_{1} & \hat{e}_{2} & \hdots  & \hat{e}_{N}
+\end{array}\right]
+\end{eqnarray*}
+
+
+By reformulating the algebra in terms of Hadamard products of sparse matrices, thousands or millions of operations are computed, rather than billions or trillions. This is because once $K$ is separated from the residuals, it only needs to be computed once for all time periods, multiplying the outer product of the residuals by using techniques that exploit its sparseness. While I use this procedure for space-time correlations, this procedure is also practical in other applications. For example, letting K be a binary matrix indicating clusters.
+\end{document}
