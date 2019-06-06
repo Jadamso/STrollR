@@ -15,12 +15,12 @@ $\Sigma_{} = \Sigma_{I} + \Sigma_{T}$
 one can use a weight $k_{i,j}$ between observations $i$ and $j$ based on their distance. For example, the Bartlett kernel, also known as the tent or triangle kernel, can create very sparse covariance matrices, as $k_{i,j}=0$ for many $i,j$. To exploit this property, I first formulate the `meat' of the variance estimator,
 \begin{eqnarray*}
 X' K \circ \hat{e} \hat{e}' X
-= X' K \circ E \circ E'X 
+%= X' K \circ E \circ E'X 
 = X' K \circ (\mathbf{1} * \hat{e}) \circ ( \mathbf{1} * \hat{e})' X
-= X' (\hat{e} * (K * \hat{e})' )' X
+= X' (\hat{e} * (K * \hat{e})' )' X,
 \end{eqnarray*}
 
-,where $'$ denotes transpose, $K$ denotes the sparse weights matrix, $\circ$ denotes the Hadamard product of matrices, $*$ denotes the column-wise Hadamard product of a matrix and a vector, and $\mathbf{1}$ denotes a matrix of ones. Specifically, the kernel-weighted residuals, $K \circ \hat{e} \hat{e}'$, are 
+where $'$ denotes transpose, $K$ denotes the sparse weights matrix, $\circ$ denotes the Hadamard product of matrices, $*$ denotes the column-wise Hadamard product of a matrix and a vector, and $\mathbf{1}$ denotes a matrix of ones. Specifically, see that the kernel-weighted residuals, $K \circ \hat{e} \hat{e}'$, are 
 \begin{eqnarray*}
 \hspace*{-1em}
 \left[\begin{array}{cccc}
