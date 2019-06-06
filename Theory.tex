@@ -6,11 +6,11 @@
 %\label{sect:star_errors}
 Jordan Adamson, \url{https://github.com/Jadamso/STrollR}
 \end{center}
-The standard errors for cellular data over time can be corrected for autocorrelation over space and time. Denote $\Sigma_{i}$ as the autocorrelation over time within a cell, and $\Sigma_{t}$ as the autocorrelation over space within a time period. Then the covariance matrix for the entire set can be written as separable,
+Standard errors can be easily corrected for autocorrelation over space and time with sparse matrix techniques. Denote $\Sigma_{i}$ as the autocorrelation over time within a cell, and $\Sigma_{t}$ as the autocorrelation over space within a time period. Then the covariance matrix for the entire set can be written as separable,
 %\begin{eqnarray*}
 $\Sigma_{} = \Sigma_{I} + \Sigma_{T}$
 %\end{eqnarray*}
-, where $\Sigma_{I}$ denotes $\Sigma_{i}$ for all individuals and $\Sigma_{T}$ denotes $\Sigma_{t}$ for all time periods.\footnote{Note that either $\Sigma_{i}$ or $\Sigma_{t}$ are specified with a 0 diagonal as to not double count the variance for cell $g$ in both matrices.} To estimate $\Sigma_{t}$,
+, where $\Sigma_{I}$ denotes $\Sigma_{i}$ for all individuals and $\Sigma_{T}$ denotes $\Sigma_{t}$ for all time periods.\footnote{Note that either $\Sigma_{i}$ or $\Sigma_{t}$ are specified with a $0$ diagonal as to not double count the variance for cell $g$ in both matrices.} To estimate $\Sigma_{t}$,
 % two methods are used in practice: estimating the spatial autocorrelation process \parencite{KP1999} or correcting the standard errors post-estimation \parencite{Conley1999}.
 one can use a weight $k_{i,j}$ between observations $i$ and $j$ based on their distance. For example, the Bartlett kernel, also known as the tent or triangle kernel, can create very sparse covariance matrices, as $k_{i,j}=0$ for many $i,j$. To exploit this property, I first formulate the `meat' of the variance estimator,
 \begin{eqnarray*}
@@ -53,7 +53,7 @@ k_{1N} & k_{2N} & \hdots  & k_{NN}
 \end{eqnarray*}
 
 
-By reformulating the algebra in terms of Hadamard products of sparse matrices, thousands or millions of operations are computed, rather than billions or trillions. This is because once $K$ is separated from the residuals, it only needs to be computed once for all time periods, multiplying the outer product of the residuals by using techniques that exploit its sparseness. While I use this procedure for space-time correlations, this procedure is also practical in other applications. For example, letting K be a binary matrix indicating clusters.
+By reformulating the algebra in terms of Hadamard products of sparse matrices, thousands or millions of operations are computed, rather than billions or trillions. This is because once $K$ is separated from the residuals, it only needs to be computed once for all time periods, multiplying the outer product of the residuals by using techniques that exploit its sparseness. While I use this procedure for space-time correlations, it is also practical in other applications (for example, with a binary $K-$matrix that indicates clusters).
 \end{document}
 
 % http://www.pnas.org/content/107/35/15367.full
