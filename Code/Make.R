@@ -18,7 +18,7 @@ pdir  <- paste0(pmdir, pack,"/")
 packg <- paste0(pdir, pack)
 
 
-Version <- numeric_version("0.1.5")
+Version <- numeric_version("0.1.6")
 #usethis::use_version()
 
 # Setup R Package
