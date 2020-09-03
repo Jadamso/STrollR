@@ -21,7 +21,8 @@ options(devtools.name="Jordan Adamson",
 ################## 
 
 Title <- 'Correct Standard Errors for Computing Spatial and Temporal Correlation post-estimation'
-Description <- 'A computationally efficient way to calculate covariance matrices that are corrected for spatial and temporal correlation using a method I call *rolling*. Huge spatiotemporal covariance matrices can be calculated using sparse matrix approaches with spam and spam64. To calculate large sparse spatial weights matrices, use spam::rdist.'
+Description <- 'A computationally efficient way to calculate covariance matrices that are corrected for spatial and temporal correlation.'
+# using a method I call *rolling*. Huge spatiotemporal covariance matrices can be calculated using sparse matrix approaches with spam and spam64. To calculate large sparse spatial weights matrices, use spam::rdist.
 #This projects adheres to semantic versioning <http://semver.org/>
 
 URL   <- paste0(' <https://github.com/Jadamso/',pack,'>')
@@ -37,6 +38,7 @@ my_description <- list(
     "Description"= Description,
     "Published"  = Sys.Date(),
     "Date"       = Sys.Date(),
+    "License"    = 'MIT + file LICENSE',
     "URL"        = URL,
     "Version"    = Version,
     "Authors@R"  = 'person("Jordan", "Adamson",
@@ -44,8 +46,14 @@ my_description <- list(
         role=c("aut","cre"))'
 )
 options(usethis.description=my_description)
-#usethis::use_description
+usethis::use_description()
 
+# License
+usethis::use_mit_license(packg)
+
+#writeLines( c( paste0("YEAR: ", year),
+#"COPYRIGHT HOLDER: Jordan Adamson"), con=paste0( packg, "/LICENSE") )
+#package.setup.safe(packg, check=T)
 #------------------------------------------------------------------
 ##################
 # Create Package
@@ -55,7 +63,7 @@ options(usethis.description=my_description)
 
 # license warning goes away with next code block
 #package.setup.safe(packg, check=F)
-usethis::create_package(packg)
+#usethis::create_package(packg)
 
 
 rdir    <- paste0(packg, "/R")
@@ -101,16 +109,4 @@ writeLines(
     paste(format(bibref, "R"),
     collapse = "\n\n"),
     con=paste0(idir, "/CITATION"))
-#------------------------------------------------------------------
-##################
-# License
-################## 
 
-options( devtools.desc.license='MIT + file LICENSE' )
-#devtools::use_mit_license(packg)
-usethis::proj_activate(packg)
-usethis::use_mit_license(packg)
-
-#writeLines( c( paste0("YEAR: ", year), "COPYRIGHT HOLDER: Jordan Adamson"), con=paste0( packg, "/LICENSE") )
-
-package.setup.safe(packg, check=T)

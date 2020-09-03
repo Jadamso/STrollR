@@ -1,26 +1,5 @@
 #------------------------------------------------------------------
 ##################
-#' cleanup spam::mvtnorm
-################## 
-#' 
-#' @param m matrix of simulations (each row a realization)
-#' @param nsim number of simulations
-#' @param xyt lattice coordinates
-#' 
-#' @return dataframe
-#' 
-# @examples
-#' @export
-
-spt_cleanup <- compiler::cmpfun( function(m, nsim, xyt){
-    m <- t(m)
-    colnames(m) <- paste0("Sim", 1:nsim)
-    DF <- as.data.frame( cbind(xyt, m ) )
-    return(DF)
-})
-
-#------------------------------------------------------------------
-##################
 #' Convert Dataframe with 1 variable to raster for one realization
 ################## 
 #' 
@@ -70,7 +49,7 @@ df2stack <- compiler::cmpfun( function(sim_i, DF){
 #' Convert simulation to rasterstack
 ################## 
 #' 
-#' @param e_spt matrix of draws from spam.mvtnorm
+#' @param e_spt matrix of draws from spam.mvtnorm  (each row a realization of a simulation)
 #' @param number of simulations
 #' @param xyt lattice structure
 #' 
@@ -79,9 +58,11 @@ df2stack <- compiler::cmpfun( function(sim_i, DF){
 # @examples
 #' @export
 
+
 sim2stack <- compiler::cmpfun( function(e_spt, nsim, xyt){
 
-    DF <- spt_cleanup(e_spt, nsim, xyt)
+    rownames(e_spt) <- paste0("Sim", 1:nsim)
+    DF <- as.data.frame( cbind(xyt, t(e_spt)) )
 
     DFlist <- parallel::mclapply(
         paste0("Sim", 1:nsim), 
@@ -90,6 +71,82 @@ sim2stack <- compiler::cmpfun( function(e_spt, nsim, xyt){
     
     return(DFlist)
 })
+
+
+
+
+#------------------------------------------------------------------
+##################
+# Create Gifs
+################## 
+
+DynPlot <- compiler::cmpfun( function(
+    DFlist,
+    ti,
+    fdir,
+    pname="STvarX",
+    ind=1){
+
+    for (i in 1:ti) {
+
+        pdfname <- paste0(fdir, pname, i, ".pdf")    
+        
+        pdf(pdfname, width=12, height=12)
+        par( mar=c(0,0,1,0), bg="white")
+        
+        image( DFlist[[ind]][[i]],
+            zlim=val_range,
+            col=rev(rainbow(100)))
+
+        title( paste0("Time ", i))   
+        dev.off()
+    }
+})
+
+
+DynGif <- compiler::cmpfun( function( pname, fdir, vw=FALSE){
+
+    mkGif <- paste0('convert -delay 100 ',
+        '-size 1000x1000 ',
+        '-loop 0 ',
+        fdir, pname,'*.pdf ',
+        fdir, pname,'.gif')
+    clGif <- paste0('rm ', fdir, pname, '*.pdf')       
+
+    system(mkGif)  
+    system(clGif)
+    
+    if(vw) {
+        vwGif <- paste0('eog ', fdir, pname,'.gif')
+        system(vwGif)
+    } 
+} )
+
+#' Create Gifs
+#' @param DFlist 
+#' @param ti number of time periods
+#' @param fdir,pname directory and file
+#' @param ind which simulation
+#' @param vw view output
+#' 
+#' @return list of rasterstacks
+#'
+mkGif <-  compiler::cmpfun( function(
+    DFlist,
+    ti,
+    fdir='~/Desktop/Packages/STrollR/STsim/',
+    pname="STvarX",
+    ind=1,
+    vw=FALSE){
+    
+    DynPlot(DFlist, ti, fdir, pname, ind)
+    DynGif(pname, vw)
+})
+
+# @describeIn mkGif   Create GIF Plots
+DynGif
+# @describeIn mkGif   Create GIF Plots
+DynPlot
 
 #------------------------------------------------------------------
 ##################

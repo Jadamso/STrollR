@@ -4,21 +4,30 @@
 \alias{varioJ}
 \title{Variogram Calculation}
 \usage{
-varioJ(coords, cutt, residu, latlon = FALSE, indices = FALSE,
-  clean = FALSE)
+varioJ(
+  coords,
+  cuttoff,
+  E,
+  latlon = FALSE,
+  indices = FALSE,
+  clean = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{coords}{coordinate matrix}
 
-\item{cutt}{cutoff from which to calculate variogram}
+\item{cuttoff}{cutoff from which to calculate variogram}
 
-\item{residu}{vector of values (i.e. OLS residuals) associated coords}
+\item{E}{vector of values (i.e. OLS residuals) associated coords}
 
 \item{latlon}{coordinates are lon,lat or x,y}
 
 \item{indices}{return indices?}
 
 \item{clean}{unused currently}
+
+\item{verbose}{}
 }
 \value{
 data.frame of dij and (ei-ej)^2

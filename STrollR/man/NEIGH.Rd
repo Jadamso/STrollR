@@ -2,12 +2,25 @@
 % Please edit documentation in R/SpatialWeights.R
 \name{NEIGH}
 \alias{NEIGH}
-\title{Calculate the weights objects used in {spdep} {sphet}}
+\title{Calculate the weights objects}
 \usage{
-NEIGH(coord_sp, neigh = 1, knn = TRUE, adj = FALSE, dnn = FALSE,
-  rast = FALSE, vario = FALSE, sphet = FALSE, tracer = TRUE,
-  tr_type = "mult", tr_m = 20, tr_p = 16, symm = TRUE,
-  symm_check = TRUE, SAVE = NA)
+NEIGH(
+  coord_sp,
+  neigh = 1,
+  knn = TRUE,
+  adj = FALSE,
+  dnn = FALSE,
+  rast = FALSE,
+  vario = FALSE,
+  tracer = TRUE,
+  tr_type = "mult",
+  tr_m = 20,
+  tr_p = 16,
+  symm = TRUE,
+  symm_check = TRUE,
+  SAVE = NA,
+  write_gwt = F
+)
 }
 \arguments{
 \item{coord_sp}{matrix of coordinates or a SpatialPoints object}
@@ -24,8 +37,6 @@ NEIGH(coord_sp, neigh = 1, knn = TRUE, adj = FALSE, dnn = FALSE,
 
 \item{vario}{is coord_sp a weights matrix?}
 
-\item{sphet}{create objects used in sphet?}
-
 \item{tracer}{create trace matrix objects?}
 
 \item{tr_type}{type of trace matrix}
@@ -38,11 +49,13 @@ NEIGH(coord_sp, neigh = 1, knn = TRUE, adj = FALSE, dnn = FALSE,
 
 \item{symm_check}{check for symmetric weights matrix}
 
-\item{SAVE}{filename to save to, NA <default> returns as object}
+\item{SAVE}{filename to save to, NA (default) returns as object}
+
+\item{write_gwt}{create GWT objects used in spdep or sphet}
 }
 \value{
 filename of saved objects, or returns objects if SAVE=NA
 }
 \description{
-Calculate the weights objects used in {spdep} {sphet}
+Calculate the weights objects
 }

@@ -7,7 +7,7 @@
 sim2stack(e_spt, nsim, xyt)
 }
 \arguments{
-\item{e_spt}{matrix of draws from spam.mvtnorm}
+\item{e_spt}{matrix of draws from spam.mvtnorm  (each row a realization of a simulation)}
 
 \item{xyt}{lattice structure}
 

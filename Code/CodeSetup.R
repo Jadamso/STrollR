@@ -5,18 +5,17 @@
 
 
 ## Imported Packages: (.packages())
-rfiles <- c("Matrix","spam","spam64",
-    "parallel","data.table","lfe", "spdep", "sphet")
-for( i in rfiles) {
-    #devtools::use_package( i, pkg=packg)
-    usethis::use_package( i )
-}
+rfiles <- c("Matrix", "spam", "spam64", "raster", "sp", "spdep")
+#"parallel", "data.table", "lfe",
+#"sphet", "sf", 'spacetime'
+
+for( i in rfiles) { usethis::use_package( i ) }
 
 # devtools::use_package( i, "Suggests", pkg=pdir)}
 
-#install.packages("sf")
+#install.packages()
 #devtools::install_github("thk686/rgdal2")
-# library(spacetime)
+
 
 #-------------------------------------------------------------------
 ##################
@@ -24,19 +23,20 @@ for( i in rfiles) {
 ################## 
 
 rfile <- c(
-    "VarioJ.R",
-    #"TwoWayFE.R",
+    "MakeData.R",
     "SpatialWeights.R",
-    "vcovST_meat.R",
-    "vcovSTsep.R",
-    "vcovSTsep_loop.R",
-    "SpaceTimeSE_format.R",  
-    "SpaceTimeSE.R",
-    "STFakeData.R",
     "STsimFunctions.R",
-    "STsimPlotFunctions.R",
-    "mfxall.R",
-    "mfxi.R")
+    "vcovSHAC.R",
+    "VarioJ.R")
+
+#"TwoWayFE.R"
+#"mfxall.R"
+#"mfxi.R"
+#"vcovST_meat.R"
+#"vcovSTsep.R"
+#"vcovSTsep_loop.R"
+#"SpaceTimeSE_format.R"
+#"SpaceTimeSE.R"
 
 rfiles <- paste0(pdir,"Code/R_Code/",rfile)
 

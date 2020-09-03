@@ -1,11 +1,7 @@
 #########################
 # Calculating Weights Matrices
 #########################
-message("SpatialWeights")
-library(spdep)
-library(sphet)
 
-## Highly Suggest library(spam); library(spam64)
 
 #------------------------------------------------------------------
 ##################
@@ -22,43 +18,18 @@ library(sphet)
 #' @export
 
 
-KNN <- function(w,h=w, type="Moore") {
+KNN <- compiler::cmpfun( function(w,h=w, type="Moore") {
     if(type=="Moore"){
         neighs <- (2*w+1)*(2*h+1)-1
     } else if(type=="VonNeumann") {
         # neighs <- (2*w+1)*(2*h+1)-1
     }
-}
-KNN <- compiler::cmpfun(KNN)
+})
+
 
 #------------------------------------------------------------------
 ##################
-#' Write a listw object as a GWT file
-##################
-#' 
-#' @param listw returned from spdep::listw
-#' @param dgwt_outfile name of file 
-#' @return dgwt_outfile
-#  @examples 
-#    coord_mat <- expand.grid( list(x=1:10, y=1:10))
-#    listw_dist <- mat2listw( dist(coord_mat) )
-#    listw2gwt( listw_dist ) )
-#' @export
-
-write.listw2gwt <- function(
-    listw,
-    dgwt_outfile=paste0( tempdir(),"dgwt.GWT") )
-{
-    dgwt  <- spdep::listw2sn(listw) 
-    #distW <- as(dgwt, "distance")
-    spdep::write.sn2gwt(dgwt, dgwt_outfile)
-    return(dgwt_outfile)
-}
-write.listw2gwt <- compiler::cmpfun(write.listw2gwt)
-
-#------------------------------------------------------------------
-##################
-#' Calculate the weights objects used in {spdep} {sphet} 
+#' Calculate the weights objects
 ##################
 #' @param coord_sp matrix of coordinates or a SpatialPoints object
 #' @param neigh number of neighbours to use in calculation
@@ -67,22 +38,24 @@ write.listw2gwt <- compiler::cmpfun(write.listw2gwt)
 #' @param dnn dnn approach unsupported
 #' @param rast raster approach unsupported
 #' @param vario is coord_sp a weights matrix? 
-#' @param sphet create objects used in sphet?
 #' @param tracer create trace matrix objects?
 #' @param tr_type type of trace matrix
 #' @param tr_m trace matrix m
 #' @param tr_p trace matrix p
 #' @param symm make weights symmetric
 #' @param symm_check check for symmetric weights matrix
-#' @param SAVE filename to save to, NA <default> returns as object
+#' @param SAVE filename to save to, NA (default) returns as object
+#' @param write_gwt create GWT objects used in spdep or sphet
 #'
 #' @return filename of saved objects, or returns objects if SAVE=NA
 #  @examples 
 #    coord_mat <- sp::SpatialPoints(expand.grid( list(x=1:10, y=1:10)))
 #    gridded(coord_mat) <- TRUE
-#    NEIGH(coord_sp, neigh=2, sphet=FALSE, trace=FALSE)
+#    NEIGH(coord_sp, neigh=2, trace=FALSE)
 #'
 #' @export
+# used in {spdep} {sphet} 
+
 
 NEIGH <- compiler::cmpfun( function(
     coord_sp,
@@ -92,23 +65,23 @@ NEIGH <- compiler::cmpfun( function(
     dnn=FALSE,
     rast=FALSE,
     vario=FALSE,
-    sphet=FALSE,
     tracer=TRUE,
     tr_type="mult", #"moments""
     tr_m=20,
     tr_p=16,
     symm=TRUE,
     symm_check=TRUE,
-    SAVE=NA){
+    SAVE=NA,
+    write_gwt=F){
     
     requireNamespace("spdep")
-    requireNamespace("sphet")
 
     ##############################################
     # Create listw
     
     ## Nearest Neighbour Weights
     if(knn){
+
         neigh_i <- KNN(neigh)
         message("Nearest Neighbours: k=", neigh_i)
 
@@ -158,11 +131,13 @@ NEIGH <- compiler::cmpfun( function(
     ##############################################
     # Create dgwt
 
-    if( sphet | (vario & symm) ){
-        message("Writing GWT")
+    if( write_gwt ){
+        message('Write a listw object as a GWT file')
         system.time({ 
             dgwt_outfile <- paste0(tempdir(),"dgwt",neigh,".GWT")
-            write.listw2gwt(listw, dgwt_outfile)
+            dgwt  <- spdep::listw2sn(listw) 
+            #distW <- as(dgwt, "distance")
+            spdep::write.sn2gwt(dgwt, dgwt_outfile)
         })
     }
 
@@ -212,14 +187,13 @@ NEIGH <- compiler::cmpfun( function(
         trMatb <- W <- NA
     }
 
-    ## Sparse Distance Matrix  For SPHET HAC estimation
-    if( sphet ){ 
-        message("Make Sparse")
-        distW <- read.gwt2dist(file=dgwt_outfile)
-        # 20 seconds
-    } else {
-        distW <- NA
-    }
+#    ## Sparse Distance Matrix  For SPHET estimation
+#    if( sphet ){ 
+#        message("Make Sparse")
+#        distW <- sphet::read.gwt2dist(file=dgwt_outfile)
+#    } else {
+#        distW <- NA
+#    }
 
     ##############################################
     # Saving
@@ -234,16 +208,15 @@ NEIGH <- compiler::cmpfun( function(
 })
 
 
-
 #------------------------------------------------------------------
 ##################
 #' Weighting Kernel
 ##################
 #' 
-#' @param d returned from spdep::listw
-#' @param dmax name of file 
-#' @return bartlett weight
-#  @examples coord_mat <- expand.grid( list(x=1:10, y=1:10))
+#' @param d distance vector
+#' @param dmax maximumm distance
+#' @return vector of bartlett weights
+#  @examples
 #' @export
 
 bartlettSparse <- compiler::cmpfun( function(d,dmax){1 - d/dmax })
@@ -255,88 +228,106 @@ bartlettSparse <- compiler::cmpfun( function(d,dmax){1 - d/dmax })
 #' Compute Sparse Spatial Weights Matrix
 ##################
 #' 
-#' @param M matrix of coordinates
-#' @param cutoff use distances up cutoff
-#' @param latlon are the rows (lat,lon) coordinates?
-#' @param convert_to_angles convert cutoff from km to angles?
+#' @param XY_Mat matrix of coordinates (either lat,lon or x,y).
+#' @param latlon does XY_Mat have lat,lon coordinates?
+#' @param cutoff_s use distances up cutoff_s. (if using generic map units, must specify latlon=cutoff_km2angles=cutoff_angles2km=FALSE).
+#' @param cutoff_km2angles, cutoff_angles2km convert cutoff_s from km to angles or vice-versa?
+#' @param verbose print messages
+#'
 #' @return the number of nearest neighbours
-#' @examples weight_mat(expand.grid( list(x=1:10, y=1:10)), cutoff=.5)
+#'
+#' @examples weight_mat(expand.grid( list(x=1:10, y=1:10)), cutoff_s=.5)
 #' @export
 
-
+ 
 weight_mat <- compiler::cmpfun( function(
-    M,
-    cutoff,
-    latlon=NA,
-    convert_to_angles=TRUE)
+    XY_Mat,
+    latlon=FALSE,
+    cutoff_s,
+    cutoff_km2angles=FALSE,
+    cutoff_angles2km=FALSE,
+    verbose=F
+    )
 {
-
     requireNamespace("spam")
     requireNamespace("spam64")
-    
+
+    ## for cutoff_km2angles and cutoff_angles2km
+    angle_scale  <- (360/(6378.388*2*pi))
+
     if( is.na(latlon) | (latlon==FALSE) ) {
-        message("Euclidean distances in km")
+        if(verbose){message("assumes coordinates are 2D (e.g., are projected coordinates)")}    
+        if (cutoff_angles2km){
+            if(verbose){message("converts cutoff from angles to km")}
+            cutoff_angle <- cutoff_s
+            cutoff_km <- cutoff_angle/angle_scale
+            cutoff_bart <- cutoff_km
+        } else {
+            ## If using generic map coordinates 
+            cutoff_bart <- cutoff_s
+        }
 
-        WMAT <- spam::spam_rdist(M,M, delta=cutoff)
-
-        bart_cut <- cutoff
+        WMAT <- spam::spam_rdist(XY_Mat, XY_Mat, delta=cutoff_bart)
 
     } else {
 
-        if(latlon=="SH") {
-
-            message("Not Dooable for Sparse Matrix")
-            message("try DistMat(.,'SH')")
-            # (distance_1,2)^2 = 
-            # 111*(lat1 - lat2)**2) + 
-            # (cos(lat1*3.141593/180)*111*(long1-long2)**2
-
+        if(cutoff_km2angles){
+            if(verbose){message("converts cutoff from km to angles")}
+            cutoff_km <- cutoff_s
+            cutoff_angle <- cutoff_km*angle_scale
+            cutoff_bart <- cutoff_km
         } else {
-
-            a_scale  <- (360/(6378.388*2*pi)) 
-
-            if(convert_to_angles){
-                message("converts cutoff from km to angles")
-                a_cutoff <- cutoff*a_scale
-                bart_cut <- cutoff
-
-            } else {
-                message("Assumes cutoff is in degrees, i.e.")
-                message("     delta=delta.km*360/(6378.388*2*pi)")
-                a_cutoff <- cutoff
-                bart_cut <- a_cutoff/a_scale
-            }
-
-            WMAT <- spam::spam_rdist.earth(M,M,
-                delta=a_cutoff, miles=FALSE)
-
-            ## Cleanup
-            #diag(WMAT) <- 0
-            #WMAT <- spam::cleanup(WMAT)
+            cutoff_angle <- cutoff_s
+            cutoff_km <- cutoff_angle/angle_scale
+            cutoff_bart <- cutoff_km
         }
-    }
+    
+        #message("Assumes cutoff_s is in degrees, i.e. cutoff_s=cutoff_km*360/(6378.388*2*pi)")
+        WMAT <- spam::spam_rdist.earth(XY_Mat, XY_Mat, delta=cutoff_angle, miles=FALSE)
 
+        #if(latlon=="SH") {
+        #message("Not Dooable for Sparse Matrix")
+        #message("try DistMat(.,'SH')")
+        # (distance_1,2)^2 = 
+        # 111*(lat1 - lat2)**2) + 
+        # (cos(lat1*3.141593/180)*111*(long1-long2)**2
+
+    }
 
 
     ## Convert to Matric class used by vcovST
     WMAT     <- spam::as.dgCMatrix.spam( WMAT )
     ## https://github.com/rstats-gsoc/gsoc2017/wiki/Sparse-matrix-automatic-conversion-in-RcppArmadillo
-
     ## If class(WMAT) =="spam", use WMAT@entries 
 
-    bartlettSparse <- cmpfun( function(d,dmax){1 - d/dmax } )
-    WMAT@x  <- bartlettSparse( WMAT@x, bart_cut)
+    WMAT@x  <- bartlettSparse( WMAT@x, cutoff_bart)
 
     ## Clean
     diag(WMAT) <- 1
     WMAT <- WMAT * (WMAT > .Machine$double.eps)
     WMAT <- Matrix::drop0(WMAT)
-
+    ## diag(WMAT) <- 0
+    ## WMAT <- spam::cleanup(WMAT)
+    
     return(WMAT)
 })
 
 
+#' @describeIn weight_mat weight_mat.df is a wrapper of weight_mat for dataframes
+weight_mat.df <- compiler::cmpfun( function(
+    DFs,
+    xy_names=c("Loc_X", "Loc_Y"),
+    latlon=FALSE,
+    cutoff_s,
+    cutoff_km2angles=FALSE,
+    cutoff_angles2km=FALSE,
+    verbose=F
+){
+    XY_Mat <- as.matrix(DFs[,xy_names])
 
+    WMAT <- weight_mat(XY_Mat, latlon, cutoff_s, cutoff_km2angles, cutoff_angles2km, verbose)
+    return(WMAT)
+})
 #------------------------------------------------------------------
 ##################
 #' Compute VonNeumann Neighbours
@@ -349,7 +340,7 @@ weight_mat <- compiler::cmpfun( function(
 #' @export
 
 
-VonNeumann <- function(coord_sp, directions=4){
+VonNeumann <- compiler::cmpfun( function(coord_sp, directions=4){
         
         if( class(coord_sp) %in% c('data.frame','matrix')){
             message('converting to SpatialPoints')
@@ -368,7 +359,6 @@ VonNeumann <- function(coord_sp, directions=4){
         nmat_1 <- tapply(nmat[,"from"], nmat[,"id"], unique)
 
         nmat_2 <- match(nmat[,"to"], nmat_1)
-
 
         nmat_id1 <- c(nmat[,"id"])
 
@@ -389,12 +379,8 @@ VonNeumann <- function(coord_sp, directions=4){
         #    matrix(rep(1), nrow(nmat))) )
         
         return(wmatsparse)
-}
-VonNeumann <- compiler::cmpfun(VonNeumann)
-
+})
 ## Note that this creates VonNeumann Neighbours (SpatW)
 ## To spatially weight the residuals according to correlatio rho, need to use
-## solve(I - rho*SpatW) %*% solve(I - rho*t(SpatW) ) 
+## solve(I - rho*SpatW) %*% solve(I - rho*t(SpatW) )
 
-## See  http://www.sciencedirect.com.libproxy.clemson.edu/science/article/pii/S0304407698000840
-# https://www.jstor.org/stable/pdf/2648817.pdf

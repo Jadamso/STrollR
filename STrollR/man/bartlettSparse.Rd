@@ -7,12 +7,12 @@
 bartlettSparse(d, dmax)
 }
 \arguments{
-\item{d}{returned from spdep::listw}
+\item{d}{distance vector}
 
-\item{dmax}{name of file}
+\item{dmax}{maximumm distance}
 }
 \value{
-bartlett weight
+vector of bartlett weights
 }
 \description{
 Weighting Kernel

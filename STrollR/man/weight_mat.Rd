@@ -2,18 +2,38 @@
 % Please edit documentation in R/SpatialWeights.R
 \name{weight_mat}
 \alias{weight_mat}
+\alias{weight_mat.df}
 \title{Compute Sparse Spatial Weights Matrix}
 \usage{
-weight_mat(M, cutoff, latlon = NA, convert_to_angles = TRUE)
+weight_mat(
+  XY_Mat,
+  latlon = FALSE,
+  cutoff_s,
+  cutoff_km2angles = FALSE,
+  cutoff_angles2km = FALSE,
+  verbose = F
+)
+
+weight_mat.df(
+  DFs,
+  xy_names = c("Loc_X", "Loc_Y"),
+  latlon = FALSE,
+  cutoff_s,
+  cutoff_km2angles = FALSE,
+  cutoff_angles2km = FALSE,
+  verbose = F
+)
 }
 \arguments{
-\item{M}{matrix of coordinates}
+\item{XY_Mat}{matrix of coordinates (either lat,lon or x,y).}
 
-\item{cutoff}{use distances up cutoff}
+\item{latlon}{does XY_Mat have lat,lon coordinates?}
 
-\item{latlon}{are the rows (lat,lon) coordinates?}
+\item{cutoff_s}{use distances up cutoff_s. (if using generic map units, must specify latlon=cutoff_km2angles=cutoff_angles2km=FALSE).}
 
-\item{convert_to_angles}{convert cutoff from km to angles?}
+\item{cutoff_km2angles, }{cutoff_angles2km convert cutoff_s from km to angles or vice-versa?}
+
+\item{verbose}{print messages}
 }
 \value{
 the number of nearest neighbours
@@ -21,6 +41,11 @@ the number of nearest neighbours
 \description{
 Compute Sparse Spatial Weights Matrix
 }
+\section{Functions}{
+\itemize{
+\item \code{weight_mat.df}: weight_mat.df is a wrapper of weight_mat for dataframes
+}}
+
 \examples{
-weight_mat(expand.grid( list(x=1:10, y=1:10)), cutoff=.5)
+weight_mat(expand.grid( list(x=1:10, y=1:10)), cutoff_s=.5)
 }
