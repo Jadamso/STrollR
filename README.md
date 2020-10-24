@@ -35,7 +35,7 @@ Huge spatiotemporal covariance matrices can be efficiently calculated by using s
 
 Create Datasets with Space, Time, or Space-Time attributes
 ```r
-library(raster)
+library(STrollR)
 set.seed(33)
 ## Make Data
 DFst <- make_spacetime_data(11,6,2)
@@ -119,7 +119,7 @@ Run 400 Regressions and Summarize SE's: SHAC vs. IID
 ## Simulate 400 Regressions
 se_sims <- lapply(1:400, function(b){
     DFs <- make_space_data(21,1, xpars=c(0,.1), theta=rep(4,1),
-         sar_factor=.5, error_type='focal', error_scale=2)
+         sar_factor=.5, error_type='distance', error_scale=2)
     reg <- lm(Y~X1, data=DFs)
     vcv_list <- list(
         IID=vcov(reg),
@@ -175,7 +175,7 @@ vcv_list <- list(
         add_hc=F, add_cl=T, cluster=DFst[,c('Time_ID')]),
     PL=sandwich::vcovPL(reg, cluster=DFst[,c('Space_ID','Time_ID')]),
     PC=sandwich::vcovPC(reg, cluster=DFst[,c('Space_ID','Time_ID')]),
-    2CCE=sandwich::vcovCL(reg, cluster=DFst[,c('Space_ID','Time_ID')]),
+    P2CCE=sandwich::vcovCL(reg, cluster=DFst[,c('Space_ID','Time_ID')]),
     HC=sandwich::vcovHC(reg),
     IID=vcov(reg))
 se_list <- lapply(vcv_list, function(vcv){ sqrt(diag(vcv)) })
@@ -196,7 +196,7 @@ DFst <- make_spacetime_data(21, 6, 2)
 DFst2 <-dummies::dummy.data.frame(DFst,
     names=c("Space_Group", "Time_Group"), sep='.')
 Space_Group_FE <- grep('Space_Group', names(DFst2), value=T)
-Space_Group_Coef <- as.numeric(gsub('Space_Group\\.','',Spatial_Group_FE))
+Space_Group_Coef <- as.numeric(gsub('Space_Group\\.','',Space_Group_FE))
 Time_Group_FE <- grep('Time_Group', names(DFst2), value=T)
 Time_Group_Coef <- as.numeric(gsub('Time_Group\\.','',Time_Group_FE))
 Space_FE <- as.matrix(DFst2[,Space_Group_FE])%*%as.matrix(Space_Group_Coef)
@@ -221,7 +221,7 @@ vcv_list <- list(
         add_hc=F, add_cl=T, cluster=DFst[,c('Time_ID')]),
     PL=sandwich::vcovPL(reg, cluster=DFst[,c('Space_ID','Time_ID')]),
     PC=sandwich::vcovPC(reg, cluster=DFst[,c('Space_ID','Time_ID')]),
-    2CCE=sandwich::vcovCL(reg, cluster=DFst[,c('Space_ID','Time_ID')]),
+    P2CCE=sandwich::vcovCL(reg, cluster=DFst[,c('Space_ID','Time_ID')]),
     HC2=vcov(reg))
 
 se_list <- lapply(vcv_list, function(vcv){ sqrt(diag(vcv)) })
@@ -283,25 +283,33 @@ V2 <- 1/n * t(X) %*% t( r*t(w*r) ) %*% X
 
 #### Comparison of Internal Methods
 
+
 Compare Meat Matrix Calculations by Computational Approach (for data with X,Y coordinates)
+Currently, `STrollR:::XOmegaX_rolled` cannot be called directly
+
 ```r
+library(Matrix)
+library(STrollR)
 DFs <- make_space_data(21,2)
 reg <- lm(Y~X1+X2, data=DFs)
 E <- resid(reg)
 Xvars <- names(coef(reg))
-X <- as.matrix(model.frame.i(reg)[,Xvars])
+X <- as.matrix(STrollR:::model.frame.i(reg)[,Xvars])
 
 ## Compute Meat Matrices
+## Must Manually Load from STrollR
 cutoff_s <- .5  #generic map units
-system.time(XWeeX1 <- XOmegaX_rolled(X, weight_mat.df(DFs, cutoff_s=cutoff_s), E)) ##.066
-system.time(XWeeX2 <- XOmegaX_semirolled(X, weight_mat.df(DFs, cutoff_s=cutoff_s), E)) ##.186
-system.time(XWeeX3 <- XOmegaX_bruteforce_xy(X, E, DFs$Loc_Y, DFs$Loc_X, cutoff_s)) ##.027
+system.time(XWeeX1 <- STrollR:::XOmegaX_rolled(X, weight_mat.df(DFs, cutoff_s=cutoff_s), E)) ##.066
+system.time(XWeeX2 <- STrollR:::XOmegaX_semirolled(X, weight_mat.df(DFs, cutoff_s=cutoff_s), E)) ##.186
+system.time(XWeeX3 <- STrollR:::XOmegaX_bruteforce_xy(X, E, DFs$Loc_Y, DFs$Loc_X, cutoff_s)) ##.027
 
 ## See that any differences are negligable
-sum((XWeeX3-XWeeX2)^2)
 sum((XWeeX3-XWeeX1)^2)
+sum((XWeeX3-XWeeX2)^2)
 sum((XWeeX2-XWeeX1)^2)
 ```
+
+
 
 Compare Brute-Force Meat Matrix Calculations for X,Y and Lat,Lon Data
 ```r
@@ -309,10 +317,10 @@ DFs <- make_space_data(21,2)
 reg <- lm(Y~X1+X2, data=DFs)
 E <- resid(reg)
 Xvars <- names(coef(reg))
-X <- as.matrix(model.frame.i(reg)[,Xvars])
+X <- as.matrix(STrollR:::model.frame.i(reg)[,Xvars])
 XY_Coords <- DFs[,c('Loc_X', 'Loc_Y')]
 cutoff_s <- .5  #generic map units
-WMAT  <- weight_mat.df(XY_Coords, cutoff_s=cutoff_s)
+WMAT  <- STrollR:::weight_mat.df(XY_Coords, cutoff_s=cutoff_s)
 
 ## Convert from Generic Coordinates to LatLon
 ## (assume generic coordinates were centered on Rome with Lambert Azimuthal Equal Area projection)
@@ -324,25 +332,23 @@ LL_Coords <- as.data.frame(sp::spTransform(LL_Coords, sp::CRS("+init=epsg:4326")
 ## Compute Meat Matrix via lat,lon coordinates
 ## LAEA map units are in meters, so transform to km before converting to angles
 cutoff_km <- cutoff_s/1000
-XWeeX3 <- XOmegaX_bruteforce_xy(X, E, DFs$Loc_Y, DFs$Loc_X, cutoff_s)
-XWeeX4 <- XOmegaX_bruteforce_ll(X, E, LL_Coords$Loc_Y, LL_Coords$Loc_X, cutoff_km)
-XWeeX5 <- XOmegaX_bruteforce_ll(X, E, LL_Coords$Loc_Y, LL_Coords$Loc_X, cutoff_km, manual_dist=F)
+XWeeX3 <- STrollR:::XOmegaX_bruteforce_xy(X, E, DFs$Loc_Y, DFs$Loc_X, cutoff_s)
+XWeeX4 <- STrollR:::XOmegaX_bruteforce_ll(X, E, LL_Coords$Loc_Y, LL_Coords$Loc_X, cutoff_km)
+XWeeX5 <- STrollR:::XOmegaX_bruteforce_ll(X, E, LL_Coords$Loc_Y, LL_Coords$Loc_X, cutoff_km, manual_dist=F)
 ## See that the differences are very small, but not zero
 (XWeeX4-XWeeX3)/(XWeeX3)*100
 (XWeeX5-XWeeX3)/(XWeeX3)*100
 
 ## Plot Weights Matrices
-WMAT2 <- weight_mat.df(LL_Coords, cutoff_s=cutoff_km, latlon=T, cutoff_km2angles=T)
+WMAT2 <- STrollR:::weight_mat.df(LL_Coords, cutoff_s=cutoff_km, latlon=T, cutoff_km2angles=T)
+library(Matrix)
 gridExtra::grid.arrange(image(WMAT),image(WMAT2), ncol=2)
 ## notice they are very similar, but not identical
 ```
 
 
-
-
-
 ## Some Resources I found useful along the way
-* Solomon Hsiang (2010), Kelejian and Prucha (2006), Kelejian and Prucha (1999), Conley (1999)
+* Baltagi and Pirotte (2010), Hsiang (2010), Kelejian and Prucha (2006), Kelejian and Prucha (1999), Conley (1999)
 * https://msu.edu/~tjv/ferobustse-working-paper.pdf
 * https://editorialexpress.com/cgi-bin/conference/download.cgi?db_name=IAAE2017&paper_id=612
 * https://spatial.uchicago.edu/sites/spatial.uchicago.edu/files/11_spatial2sls_slides.pdf

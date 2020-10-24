@@ -31,17 +31,18 @@ NULL
 ##################
 # XOmegaX Rolled Weights Matrices
 ##################
-#' @rdname XOmegaX 
 # Potential Speedup if WEE is symmetric? WEE=(e * t(WMAT * e))
+
+#' @rdname XOmegaX 
 XOmegaX_rolled <- compiler::cmpfun( function(X, WMAT, E){
-    require("Matrix")
-    XWeeX  <- t(X) %*% t(E * t(WMAT * E)) %*% X
+    #require(Matrix)
+    XWeeX  <- Matrix::t(X) %*% Matrix::t(E * Matrix::t(WMAT * E)) %*% X
     return( as.matrix(XWeeX) )
 } )
 
 #' @rdname XOmegaX
 XOmegaX_semirolled <- compiler::cmpfun( function(X, WMAT, E){
-    require("Matrix")
+    #require("Matrix")
     WEE <- sapply(1:nrow(WMAT), function(i){
         WMAT[i,]*E[i]*E
     })
@@ -225,6 +226,15 @@ model.frame.i <- function(reg, check_int=T){
 #' @param options passed to sandwich
 #' @param add_hc,add_cluster,add_hac logical for adding HC correction (default=T), Cluster correction (default=F), HAC correction (default=F)
 #' @return covariance matrix
+#' @examples
+#' library(STrollR)
+#' DFs <- make_space_data(21,2)
+#' reg <- lm(Y~X1+X2, data=DFs)
+#' E <- 
+#' wmat <- weight_mat.df(DFs, cutoff_s=.5)
+#' vcv <- vcovSHAC(reg, wmat, method='rolled')
+#' ##STrollR:::XOmegaX_rolled( as.matrix(DFs[,c('X1', 'X2')]), wmat, resid(reg))
+#' @export
 vcovSHAC <- compiler::cmpfun( function(
     reg,
     wmat,
@@ -312,6 +322,7 @@ vcovSHAC <- compiler::cmpfun( function(
 ################## 
 #
 #' @describeIn vcovSHAC similar to vcovSTHAC, but treats spatial autocorrelation seperately within each time period
+#' @export
 vcovSHACsep <- compiler::cmpfun( function(
     reg,
     wmat,
@@ -440,6 +451,7 @@ vcovSHACsep <- compiler::cmpfun( function(
 # vcovSTHAC
 ################## 
 #' @describeIn vcovSHAC  Space and Time HAC. Also weights the time-dimension according to bartlett kernel (i.e., weight= K(space)*K(time)) for bartlett-kernel K.
+#' @export
 vcovSTHAC <- compiler::cmpfun( function(
     reg,
     wmat,

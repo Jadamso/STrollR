@@ -1,8 +1,8 @@
 Package: STrollR
 Title: Correct Standard Errors for Computing Spatial and
     Temporal Correlation post-estimation
-Version: 0.2.0
-Date: 2020-09-03
+Version: 0.2.1
+Date: 2020-10-24
 Authors@R: 
     person(given = "Jordan",
            family = "Adamson",
@@ -17,7 +17,7 @@ License: MIT + file LICENSE
 URL: <https://github.com/Jadamso/STrollR>
 Encoding: UTF-8
 LazyData: true
-Published: 2020-09-03
+Published: 2020-10-24
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
@@ -26,4 +26,5 @@ Imports:
     spam64,
     raster,
     sp,
-    spdep
+    spdep,
+    mvtnorm

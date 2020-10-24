@@ -217,8 +217,7 @@ NEIGH <- compiler::cmpfun( function(
 #' @param dmax maximumm distance
 #' @return vector of bartlett weights
 #  @examples
-#' @export
-
+#  @export
 bartlettSparse <- compiler::cmpfun( function(d,dmax){1 - d/dmax })
     # sandwich::kweights(.,kernel="Bartlett")
     # stats::kernel( )
@@ -238,8 +237,6 @@ bartlettSparse <- compiler::cmpfun( function(d,dmax){1 - d/dmax })
 #'
 #' @examples weight_mat(expand.grid( list(x=1:10, y=1:10)), cutoff_s=.5)
 #' @export
-
- 
 weight_mat <- compiler::cmpfun( function(
     XY_Mat,
     latlon=FALSE,
@@ -314,6 +311,7 @@ weight_mat <- compiler::cmpfun( function(
 
 
 #' @describeIn weight_mat weight_mat.df is a wrapper of weight_mat for dataframes
+#' @export
 weight_mat.df <- compiler::cmpfun( function(
     DFs,
     xy_names=c("Loc_X", "Loc_Y"),
@@ -338,8 +336,6 @@ weight_mat.df <- compiler::cmpfun( function(
 #' @return sparse weights matrix
 # @examples VonNeumann( sp::SpatialPoints(expand.grid( list(x=1:10, y=1:10))) )
 #' @export
-
-
 VonNeumann <- compiler::cmpfun( function(coord_sp, directions=4){
         
         if( class(coord_sp) %in% c('data.frame','matrix')){

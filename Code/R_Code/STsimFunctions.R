@@ -10,7 +10,6 @@
 #' 
 # @examples
 #' @export
-
 var2stack <- compiler::cmpfun( function(df_i, sim_i) {
     coordinates(df_i) <- ~ x + y
     gridded(df_i) <- TRUE
@@ -30,7 +29,6 @@ var2stack <- compiler::cmpfun( function(df_i, sim_i) {
 #' 
 # @examples
 #' @export
-
 df2stack <- compiler::cmpfun( function(sim_i, DF){
 
     DFi <- DF[ c("Time","x","y",sim_i)]
@@ -57,8 +55,6 @@ df2stack <- compiler::cmpfun( function(sim_i, DF){
 #' 
 # @examples
 #' @export
-
-
 sim2stack <- compiler::cmpfun( function(e_spt, nsim, xyt){
 
     rownames(e_spt) <- paste0("Sim", 1:nsim)

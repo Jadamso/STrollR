@@ -11,7 +11,7 @@ make_time_data(
   time_groups = round(sqrt(dimT)),
   xpars = c(0, 1),
   theta = 1:K,
-  error_type = "focal",
+  error_type = "distance",
   error_scale = 1,
   ar_factor = 2/3,
   wt_mat = toeplitz(c(1, ar_factor, ar_factor^2, rep(0, dimT - 3))),
@@ -48,8 +48,8 @@ dataframe
 Create Multivariate Temporal Data
 }
 \details{
-'focal' creates errors based on \eqn{e = u + \rho v}
-'distance' creates errors base on drawing e from a multivariate normal with covariance matrix wt_mat
+'focal' creates errors based on \eqn{e = u + \rho v}.
+'distance' creates errors base on drawing e from a multivariate normal with covariance matrix wt_mat.
 }
 \examples{
 DFt  <- make_time_data(6,2)

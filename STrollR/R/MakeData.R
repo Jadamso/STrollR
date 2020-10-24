@@ -1,15 +1,15 @@
 #------------------------------------------------------------------
 ##################
-#' make_space_data
+# make_space_data
 ################## 
-#'
+#' Create Multivariate Spatial Data
 #' @param dimS spatial dimension 
 #' @param K number of covariates
 #' @param t_id Time ID
 #' @param space_groups number of contiguous groups (e.g. countries)
 #' @param xpars generate each Xvariable from uniform(xpar[1],xpar[2]) 
 #' @param theta parameter vector for Y=X%*%theta
-#' @param error_type c('focal', 'distance', 'spherical')
+#' @param error_type c('distance', 'focal', 'spherical')
 #' @param error_scale variance of errors (normally distributed) 
 #' @param sar_factor parameter for error_type='focal'
 #' @param wf_mat matrix specifing weights to smooth when error_type='focal'
@@ -21,14 +21,17 @@
 #' @description  Create Multivariate Spatial Data
 #'
 #' @details
-#' 'focal' creates errors based on \eqn{e = u + \rho v}
-#' 'distance' creates errors base on drawing e from a multivariate normal with covariance matrix ws_mat
+#' 'focal' creates errors based on \eqn{e = u + \rho v}.
+#' 'distance' (the default) creates errors base on drawing e from a multivariate normal with covariance matrix ws_mat.
 #'  
 #' @examples
-#' set.seed(3)
+#' library(STrollR)
 #' DFs  <- make_space_data.raster(10,2,error_type='distance')
-#' set.seed(3)
+#' DFs  <- make_space_data.raster(10,2,error_type='focal')
+#' DFs  <- make_space_data.raster(10,2,error_type='spherical')
 #' DFs2 <- make_space_data(10,2,error_type='distance')
+#' DFs2 <- make_space_data(10,2,error_type='focal')
+#' DFs2 <- make_space_data(10,2,error_type='spherical')
 #' @export
 make_space_data <- compiler::cmpfun( function(
     dimS,
@@ -37,7 +40,7 @@ make_space_data <- compiler::cmpfun( function(
     space_groups=round(sqrt(dimS)),
     xpars=c(0,1),
     theta=1:K,
-    error_type='focal',
+    error_type='distance',
     error_scale=1,
     sar_factor=.5,
     wf_mat=rbind( rep(sar_factor,3), c(sar_factor,0,sar_factor),rep(sar_factor,3)),
@@ -70,15 +73,17 @@ make_space_data <- compiler::cmpfun( function(
 
     ## Errors
     if(error_type=='focal'){
-        require(raster)
+        #require(raster)
         Erast0 <- raster::raster( matrix( rnorm(dimS*dimS, mean=0, 1), ncol=dimS, nrow=dimS))
         Erast1 <- raster::focal(Erast0, wf_mat, sum, pad=TRUE, padValue=NA, na.rm=T)
         Erast  <- raster::raster( matrix( rnorm(dimS*dimS, mean=0, 1), ncol=dimS, nrow=dimS)) + Erast1
-        Erast  <- as.matrix(c(as.matrix(Erast)))*error_scale
+        Erast  <- as.matrix(c(raster::as.matrix(Erast)))*error_scale
     } else if (error_type=='distance') {
+        #require(mvtnorm)
         Erast0 <- mvtnorm::rmvnorm(1, mean=rep(0, nrow(ws_mat)), sigma=ws_mat)
         Erast <- t(Erast0)*error_scale
     } else if (error_type=='spherical') {
+        #require(mvtnorm)
         Erast0 <- mvtnorm::rmvnorm(1, mean=rep(0, nrow(Xrast)), sigma=diag( nrow(Xrast)))
         Erast <- t(Erast0)*error_scale
     }
@@ -105,6 +110,7 @@ make_space_data <- compiler::cmpfun( function(
 
 
 #' @describeIn make_space_data make_space_data.df uses raster functions instead of matrices (primarily for transparent debugging)
+#' @export
 make_space_data.raster <- compiler::cmpfun( function(
     dimS,
     K,
@@ -112,7 +118,7 @@ make_space_data.raster <- compiler::cmpfun( function(
     space_groups=round(sqrt(dimS)),
     xpars=c(0,1),
     theta=1:K,
-    error_type='focal',
+    error_type='distance',
     error_scale=1,
     sar_factor=.5,
     wf_mat=rbind( rep(sar_factor,3), c(sar_factor,0,sar_factor),rep(sar_factor,3)),
@@ -157,7 +163,7 @@ make_space_data.raster <- compiler::cmpfun( function(
         Erast0 <- Erast1 <- base_rast
         values(Erast0) <- rnorm(dimS*dimS, mean=0, 1)*error_scale
         values(Erast1) <- rnorm(dimS*dimS, mean=0, 1)*error_scale
-        Erast <- focal(Erast0, wf_mat, sum, pad=TRUE, padValue=NA, na.rm=T)+ Erast1
+        Erast <- raster::focal(Erast0, wf_mat, sum, pad=TRUE, padValue=NA, na.rm=T)+ Erast1
     } else if (error_type=='distance') {
         Erast0 <- mvtnorm::rmvnorm(1, mean=rep(0, nrow(ws_mat)), sigma=ws_mat)
         Erast  <- raster::rasterFromXYZ(cbind(xy_mat, t(Erast0)))*error_scale
@@ -211,14 +217,12 @@ make_space_data.raster <- compiler::cmpfun( function(
 #' @return dataframe
 #'
 #' @details 
-#' 'focal' creates errors based on \eqn{e = u + \rho v}
-#' 'distance' creates errors base on drawing e from a multivariate normal with covariance matrix wt_mat
+#' 'focal' creates errors based on \eqn{e = u + \rho v}.
+#' 'distance' creates errors base on drawing e from a multivariate normal with covariance matrix wt_mat.
 #'
 #' @examples DFt  <- make_time_data(6,2)
 #'
 #' @export
-
-
 make_time_data <- compiler::cmpfun( function(
     dimT,
     K,
@@ -226,7 +230,7 @@ make_time_data <- compiler::cmpfun( function(
     time_groups=round(sqrt(dimT)),
     xpars=c(0,1),
     theta=1:K,
-    error_type='focal',
+    error_type='distance',
     error_scale=1,
     ar_factor=2/3,
     wt_mat=toeplitz(c(1,ar_factor,ar_factor^2, rep(0,dimT-3))),

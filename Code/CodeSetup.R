@@ -5,7 +5,7 @@
 
 
 ## Imported Packages: (.packages())
-rfiles <- c("Matrix", "spam", "spam64", "raster", "sp", "spdep")
+rfiles <- c("Matrix", "spam", "spam64", "raster", "sp", "spdep", 'mvtnorm')
 #"parallel", "data.table", "lfe",
 #"sphet", "sf", 'spacetime'
 

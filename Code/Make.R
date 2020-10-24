@@ -7,17 +7,16 @@ library(roxygen2)
 library(MiscUtils)
 
 pmdir <- path.expand("~/Desktop/Packages/")
+pack  <- "STrollR"
+pdir  <- paste0(pmdir, pack, "/")
+packg <- paste0(pdir, pack)
 
 #-------------------------------------------------------------------
 ##################
 # Make 
 ##################
-pack  <- "STrollR"
-pdir  <- paste0(pmdir, pack,"/")
-packg <- paste0(pdir, pack)
 
-
-Version <- numeric_version("0.2.0")
+Version <- numeric_version("0.2.1")
 #usethis::use_version()
 
 usethis::create_package(packg)
@@ -40,13 +39,15 @@ system( paste0('R CMD Rd2pdf ', packg) )
 
 #-------------------------------------------------------------------
 ##################
-# Upload and Install 
+# Exit, Install, Test, Upload
 ##################
 
-## MiscUtils::pack_up(pdir)
-## https://www.rstudio.com/wp-content/uploads/2015/03/devtools-cheatsheet.pdf
+q()
 
-devtools::install(packg) ## Locally Works
+
+## Install Locally and Test
+devtools::install(packg) 
+
 
 message("Manually push to github")
 ## MiscUtils::pack_up(pdir)

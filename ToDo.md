@@ -1,5 +1,6 @@
 # <p align=center> Things to Do </p>
 
+
 ## Better Make_*_Data Options
 
 add `focal` error_type for `make_spacetime_data`
@@ -7,6 +8,8 @@ add `focal` error_type for `make_spacetime_data`
 
 add better weights_matrix functionality for `make_time_data`
 * also, use stats::arima.sim, stats::filter
+
+`make_space_data` has two types of "focal" errors: SAR, SMA
 
 ## Better vcov* Options
 * different kernels (currently only Bartlett)

@@ -93,3 +93,12 @@ Calculate a SHAC (Spatial Heteroskedastic and Autocorrelation Consistent) Varian
 \item \code{vcovSTHAC}: Space and Time HAC. Also weights the time-dimension according to bartlett kernel (i.e., weight= K(space)*K(time)) for bartlett-kernel K.
 }}
 
+\examples{
+library(STrollR)
+DFs <- make_space_data(21,2)
+reg <- lm(Y~X1+X2, data=DFs)
+E <- 
+wmat <- weight_mat.df(DFs, cutoff_s=.5)
+vcv <- vcovSHAC(reg, wmat, method='rolled')
+##STrollR:::XOmegaX_rolled( as.matrix(DFs[,c('X1', 'X2')]), wmat, resid(reg))
+}

@@ -3,7 +3,7 @@
 \name{make_space_data}
 \alias{make_space_data}
 \alias{make_space_data.raster}
-\title{make_space_data}
+\title{Create Multivariate Spatial Data}
 \usage{
 make_space_data(
   dimS,
@@ -12,7 +12,7 @@ make_space_data(
   space_groups = round(sqrt(dimS)),
   xpars = c(0, 1),
   theta = 1:K,
-  error_type = "focal",
+  error_type = "distance",
   error_scale = 1,
   sar_factor = 0.5,
   wf_mat = rbind(rep(sar_factor, 3), c(sar_factor, 0, sar_factor), rep(sar_factor, 3)),
@@ -28,7 +28,7 @@ make_space_data.raster(
   space_groups = round(sqrt(dimS)),
   xpars = c(0, 1),
   theta = 1:K,
-  error_type = "focal",
+  error_type = "distance",
   error_scale = 1,
   sar_factor = 0.5,
   wf_mat = rbind(rep(sar_factor, 3), c(sar_factor, 0, sar_factor), rep(sar_factor, 3)),
@@ -50,7 +50,7 @@ make_space_data.raster(
 
 \item{theta}{parameter vector for Y=X\%*\%theta}
 
-\item{error_type}{c('focal', 'distance', 'spherical')}
+\item{error_type}{c('distance', 'focal', 'spherical')}
 
 \item{error_scale}{variance of errors (normally distributed)}
 
@@ -69,8 +69,8 @@ dataframe
 Create Multivariate Spatial Data
 }
 \details{
-'focal' creates errors based on \eqn{e = u + \rho v}
-'distance' creates errors base on drawing e from a multivariate normal with covariance matrix ws_mat
+'focal' creates errors based on \eqn{e = u + \rho v}.
+'distance' (the default) creates errors base on drawing e from a multivariate normal with covariance matrix ws_mat.
 }
 \section{Functions}{
 \itemize{
@@ -78,8 +78,11 @@ Create Multivariate Spatial Data
 }}
 
 \examples{
-set.seed(3)
+library(STrollR)
 DFs  <- make_space_data.raster(10,2,error_type='distance')
-set.seed(3)
+DFs  <- make_space_data.raster(10,2,error_type='focal')
+DFs  <- make_space_data.raster(10,2,error_type='spherical')
 DFs2 <- make_space_data(10,2,error_type='distance')
+DFs2 <- make_space_data(10,2,error_type='focal')
+DFs2 <- make_space_data(10,2,error_type='spherical')
 }
